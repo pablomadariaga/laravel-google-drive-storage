@@ -7,6 +7,8 @@ use Google\Service\Drive;
 use Illuminate\Support\Str;
 use Tes\LaravelGoogleDriveStorage\Interfaces\LaravelGoogleDriveInterface;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Log;
 use RuntimeException;
 
 /**
@@ -77,9 +79,14 @@ class GoogleDriveService implements LaravelGoogleDriveInterface
         static::initializeService();
       }
 
+      if (!$file instanceof UploadedFile || !$file->isValid()) {
+            Log::error('Expected UploadedFile, got: ' . gettype($file));
+        throw new RuntimeException('The file is not valid.');
+      }
+
       // Conditionally add 'parents' if the folder is specified or if an environment variable is set
       $fileMetadataArray = [
-        'name' => Str::random(10) . '.' . $file->extension(),
+        'name' => Str::random(10) . '.' . $file?->extension(),
       ];
 
       if ($folderId !== null || !empty(env('GOOGLE_DRIVE_FOLDER_ID'))) {
