@@ -32,9 +32,9 @@ class GoogleDriveService implements LaravelGoogleDriveInterface
    */
   protected static function initializeService()
   {
-    $clientId = env('GOOGLE_DRIVE_CLIENT_ID');
-    $clientSecret = env('GOOGLE_DRIVE_CLIENT_SECRET');
-    $refreshToken = env('GOOGLE_DRIVE_REFRESH_TOKEN');
+    $clientId = config('filesystems.disks.google.clientId') ?? env('GOOGLE_DRIVE_CLIENT_ID');
+    $clientSecret = config('filesystems.disks.google.clientSecret') ?? env('GOOGLE_DRIVE_CLIENT_SECRET');
+    $refreshToken = config('filesystems.disks.google.refreshToken') ?? env('GOOGLE_DRIVE_REFRESH_TOKEN');
 
     if ($clientId && $clientSecret && $refreshToken) {
       $client = new Client();
